@@ -25,10 +25,11 @@ using namespace std;
 jclass jCls;
 static jmethodID mEmptyCallback;
 static jmethodID mStringCallback;
+static jmethodID mNumCallback;
 
 extern "C" {
 
-    JNIEXPORT jstring JNICALL NATIVE_CALL(sayHello)(JNIEnv *env, jobject obj) {
+    JNIEXPORT void JNICALL NATIVE_CALL(sayHelloCallback)(JNIEnv *env, jobject obj){
         jCls = env->GetObjectClass(obj);
         mEmptyCallback = NULL;
         mEmptyCallback = env->GetMethodID(jCls, "onCallback", "()V");
@@ -39,7 +40,18 @@ extern "C" {
         mStringCallback = env->GetMethodID(jCls, "onCallback", "(Ljava/lang/String;)V");
 
         env->CallVoidMethod(obj, mStringCallback, env->NewStringUTF("Text from Callback"));
+    }
 
+    JNIEXPORT void JNICALL NATIVE_CALL(runNumCallback)(JNIEnv *env, jobject obj){
+        jCls = env->GetObjectClass(obj);
+
+        mNumCallback = NULL;
+        mNumCallback = env->GetMethodID(jCls, "onCallback", "(I)V");
+
+        env->CallVoidMethod(obj, mNumCallback, 1);
+    }
+
+    JNIEXPORT jstring JNICALL NATIVE_CALL(sayHello)(JNIEnv *env, jobject obj) {
         return env->NewStringUTF("Hello from c++");
     }
 }
