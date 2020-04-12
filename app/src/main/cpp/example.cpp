@@ -27,6 +27,8 @@ static jmethodID mEmptyCallback;
 static jmethodID mStringCallback;
 static jmethodID mNumCallback;
 
+example exmp1;
+
 extern "C" {
 
     JNIEXPORT void JNICALL NATIVE_CALL(sayHelloCallback)(JNIEnv *env, jobject obj){
@@ -39,7 +41,12 @@ extern "C" {
         mStringCallback = NULL;
         mStringCallback = env->GetMethodID(jCls, "onCallback", "(Ljava/lang/String;)V");
 
-        env->CallVoidMethod(obj, mStringCallback, env->NewStringUTF("Text from Callback"));
+        env->CallVoidMethod(obj, mStringCallback, env->NewStringUTF(exmp1.test()));
+
+
+        string test = exmp1.test();
+
+        __android_log_print(ANDROID_LOG_DEBUG, "Example", "test printing android log");
     }
 
     JNIEXPORT void JNICALL NATIVE_CALL(runNumCallback)(JNIEnv *env, jobject obj){
@@ -54,4 +61,9 @@ extern "C" {
     JNIEXPORT jstring JNICALL NATIVE_CALL(sayHello)(JNIEnv *env, jobject obj) {
         return env->NewStringUTF("Hello from c++");
     }
+
+    char* example::test(){
+        return const_cast<char *>("Example test method");
+    }
+
 }

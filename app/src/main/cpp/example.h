@@ -6,9 +6,12 @@
 #define KOTLINJNIEXAMPLE_EXAMPLE_H
 
 
+#include <string>
+#include <jni.h>
 
 class example {
 
+public:virtual char* test();
 };
 
 
